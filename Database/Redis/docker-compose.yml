@@ -1,0 +1,13 @@
+version: '3'  # 定义 Docker Compose 的版本
+
+services: # 定义服务，服务是在容器中运行的应用程序
+  redis:
+    image: redis:3.2
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./conf/redis.conf:/etc/redis/redis.conf
+      - ./data/redis:/data:rw
+    #配置文件启动
+    command: redis-server /etc/redis/redis.conf

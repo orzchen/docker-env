@@ -1,0 +1,15 @@
+version: '3'  # 定义 Docker Compose 的版本
+
+services:  # 定义服务，服务是在容器中运行的应用程序
+  # php:  # PHP 服务
+
+  nginx:  # Nginx 服务
+    image: nginx:latest  # 使用官方 Nginx 最新镜像
+    container_name: nginx-container
+    ports:  # 映射容器的端口到主机
+      - "8081:80"  # 将主机的 80 端口映射到容器的 80 端口，方便访问网站
+    volumes:  # 定义数据卷，挂载本地配置文件到容器内
+      - ./www:/var/www/html  # 将本地的 ./www 目录挂载到容器的 /var/www/html 目录，供 Nginx 使用
+      - ./conf/nginx.conf:/etc/nginx/conf.d/default.conf  # 将本地的 nginx 配置文件挂载到容器的默认配置位置
+    depends_on:  # 确保 nginx 在 php 服务之后启动
+      - php  # nginx 依赖 php 服务，确保 php 服务在 nginx 服务之前启动

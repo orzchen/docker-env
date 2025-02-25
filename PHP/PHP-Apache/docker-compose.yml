@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    build: .
+    image: web:php-7.2-apache # name:tag
+    container_name: web-container
+    ports:
+      - "8081:80" # web端口映射
+    # depends_on:
+    #   - db
+    # networks:
+    #   - app-network
+    volumes:
+      - ./www/:/var/www/html
+      - ./conf/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./conf/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./logs/php/xdebug.log:/var/www/log/xdebug.log
+    environment:
+      # DB_HOST: db
+      # DB_PORT: 3306
+      # DB_USER: root
+      # DB_PASSWORD: root
+      # DB_NAME: test
+      PHP_DEBUG: host.docker.internal:9000
+
+# networks:
+#   app-network:
+#     driver: bridge

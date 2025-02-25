@@ -1,0 +1,25 @@
+version: '3'  # 定义 Docker Compose 的版本
+
+services:  # 定义服务，服务是在容器中运行的应用程序
+  php:  # PHP 服务
+    build: .  # 使用当前目录的 Dockerfile 构建 PHP 镜像
+    image: web:php-7.4-fpm  # 使用官方 PHP 7.4 FPM 镜像 name:tag
+    container_name: web-container
+    volumes:  # 定义数据卷，挂载本地文件夹到容器内
+      - ./www:/var/www/html  # 将本地的 ./www 目录挂载到容器的 /var/www/html 目录，存储 PHP 文件
+      - ./conf/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./conf/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./conf/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf # 
+      - ./logs/php/xdebug.log:/var/www/log/xdebug.log
+
+    # depends_on:
+    #   - db
+    environment:
+      # DB_HOST: db
+      # DB_PORT: 3306
+      # DB_USER: root
+      # DB_PASSWORD: root
+      # DB_NAME: onebase
+      PHP_DEBUG: host.docker.internal:9000
+  
+  # PHP-fpm 需要编排 web服务器

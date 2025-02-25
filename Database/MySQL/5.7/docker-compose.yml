@@ -1,0 +1,22 @@
+version: '3'  # 定义 Docker Compose 的版本
+
+services: # 定义服务，服务是在容器中运行的应用程序
+  mysql: # MySQL 服务
+    image: biarms/mysql:5.7  # 这里使用第三方 5.7 镜像以支持在 arm64 上低版本数据库测试 其他使用 mysql:5.7
+    container_name: mysql-container
+    environment: # 环境变量配置
+      MYSQL_ROOT_PASSWORD: root  # 设置 MySQL 的 root 密码
+      MYSQL_DATABASE: test  # 创建名为 'test' 的数据库
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: root
+    ports: # 映射容器的端口到主机
+      - "3306:3306"  # 将主机的 3306 端口映射到容器的 3306 端口，方便访问数据库
+    volumes: # 定义数据卷，持久化 MySQL 数据
+      - ./data/mysql:/var/lib/mysql  # 使用命名卷 ./data/mysql 持久化 MySQL 数据库的数据
+
+    # networks:
+    #   - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
